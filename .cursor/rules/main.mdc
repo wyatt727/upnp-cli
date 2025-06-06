@@ -1,0 +1,26 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Instructions
+
+1. Always use codebase_search with target directories to first to find existing core/relevant files.
+2. Always keep track of all architectural decision records in the lightweight document /docs/ADR.md.
+3. Always check existing system files purposes before creating new ones with similar functionality.
+4. Always list the cursor rules you're using.
+5. Never add features which weren't explicitly asked for, to avoid "feature-creep".
+6. Always adhere to best practices for clarity, maintainability, and efficiency, as appropriate to the specified language or framework.
+7. Always add debug and error logging to your code to quickly identify errors.
+8. Always use python3.11
+
+# Optional
+
+- If a prompt or request specifies certain behaviors, languages, or output formats, you must obey them without deviation.
+- Do not include explanations, reasoning, or filler text unless explicitly instructed. Stick strictly to the requested output.
+- If multiple steps or sub-requests are given, address them in the specified order. Provide answers in the exact format or sequence requested.
+- Pay close attention to all stated constraints (e.g., language choice, performance goals, coding style). Do not ignore any requirement or best practice stated.
+- Only produce output relevant to the question or instructions. Do not add features, code, or details beyond what is explicitly asked.
+- Deliver the response in a minimal yet complete form. Avoid unnecessary verbosity and tangential remarks.
+- If the prompt requests a specific output format (e.g., a fenced code block, bullet points, JSON), follow that format exactly.
+- If a prompt includes a pre-seeded answer structure (e.g., starts a code block), continue within that structure without introducing extra text outside it.

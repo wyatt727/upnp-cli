@@ -1,0 +1,111 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "upnp-cli"
+version = "0.1.0"
+description = "Ultimate UPnP Pentest & Control CLI"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "UPnP CLI Team", email = "team@upnp-cli.dev"},
+]
+maintainers = [
+    {name = "UPnP CLI Team", email = "team@upnp-cli.dev"},
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators", 
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: System :: Networking",
+    "Topic :: Security",
+    "Topic :: Multimedia :: Sound/Audio",
+]
+keywords = ["upnp", "dlna", "sonos", "chromecast", "roku", "penetration-testing", "red-team", "network-scanner"]
+requires-python = ">=3.8"
+dependencies = [
+    "aiohttp>=3.8.0",
+    "pyyaml>=6.0", 
+    "netifaces>=0.11.0",
+    "requests>=2.25.0",
+    "urllib3>=1.26.0",
+    "pychromecast>=13.0.0",
+    "tqdm>=4.64.0",
+    "lxml>=4.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=22.0.0",
+    "flake8>=5.0.0", 
+    "mypy>=1.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/upnp-cli/upnp-cli"
+Documentation = "https://upnp-cli.readthedocs.io/"
+Repository = "https://github.com/upnp-cli/upnp-cli.git"
+Issues = "https://github.com/upnp-cli/upnp-cli/issues"
+
+[project.scripts]
+upnp-cli = "upnp_cli.cli:main_entry"
+ultimate-upnp = "upnp_cli.cli:main_entry"
+
+[tool.setuptools.packages.find]
+include = ["upnp_cli*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short --strict-markers"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+]
+asyncio_mode = "auto" 

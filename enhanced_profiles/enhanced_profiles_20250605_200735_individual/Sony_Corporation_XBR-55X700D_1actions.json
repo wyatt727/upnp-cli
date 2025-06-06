@@ -1,0 +1,178 @@
+{
+  "name": "Sony Corporation XBR-55X700D",
+  "match": {
+    "manufacturer": [
+      "Sony Corporation"
+    ],
+    "modelName": [
+      "XBR-55X700D"
+    ],
+    "deviceType": [
+      "urn:schemas-upnp-org:device:Basic:1"
+    ]
+  },
+  "metadata": {
+    "generated_at": "2025-06-05 20:07:35",
+    "scpd_analysis": {
+      "services_analyzed": 2,
+      "successful_parses": 2,
+      "total_actions": 2,
+      "parsing_errors": []
+    }
+  },
+  "upnp": {
+    "services": {
+      "scalarwebapi": {
+        "serviceType": "urn:schemas-sony-com:service:ScalarWebAPI:1",
+        "scpdURL": "http://192.168.4.38:33173/sony/webapi/ssdp/scpd/WebApiSCPD.xml",
+        "controlURL": "http://192.168.4.38/sony",
+        "action_count": 0,
+        "parsing_success": true
+      },
+      "ircc": {
+        "serviceType": "urn:schemas-sony-com:service:IRCC:1",
+        "scpdURL": "http://192.168.4.38/sony/ircc/IRCCSCPD.xml",
+        "controlURL": "http://192.168.4.38/sony/ircc",
+        "action_count": 2,
+        "parsing_success": true
+      }
+    },
+    "action_inventory": {
+      "scalarwebapi": {},
+      "ircc": {
+        "X_SendIRCC": {
+          "name": "X_SendIRCC",
+          "description": "",
+          "arguments_in": [
+            {
+              "name": "IRCCCode",
+              "direction": "in",
+              "data_type": "string",
+              "related_state_variable": "X_A_ARG_TYPE_IRCCCode",
+              "required": true,
+              "validation": {
+                "data_type": "string"
+              }
+            }
+          ],
+          "arguments_out": [],
+          "complexity": "\ud83d\udfe1 Medium",
+          "category": "other",
+          "soap_template": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n  <s:Body>\n    <u:X_SendIRCC xmlns:u=\"urn:schemas-sony-com:service:IRCC:1\">\n      <IRCCCode>{IRCCCODE}</IRCCCode>\n    </u:X_SendIRCC>\n  </s:Body>\n</s:Envelope>"
+        },
+        "X_GetStatus": {
+          "name": "X_GetStatus",
+          "description": "",
+          "arguments_in": [
+            {
+              "name": "CategoryCode",
+              "direction": "in",
+              "data_type": "string",
+              "related_state_variable": "X_A_ARG_TYPE_Category",
+              "required": true,
+              "validation": {
+                "data_type": "string"
+              }
+            }
+          ],
+          "arguments_out": [
+            {
+              "name": "CurrentStatus",
+              "direction": "out",
+              "data_type": "string",
+              "related_state_variable": "X_A_ARG_TYPE_CurrentStatus"
+            },
+            {
+              "name": "CurrentCommandInfo",
+              "direction": "out",
+              "data_type": "string",
+              "related_state_variable": "X_A_ARG_TYPE_CurrentCommandInfo"
+            }
+          ],
+          "complexity": "\ud83d\udd34 Complex",
+          "category": "information_retrieval",
+          "soap_template": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n  <s:Body>\n    <u:X_GetStatus xmlns:u=\"urn:schemas-sony-com:service:IRCC:1\">\n      <CategoryCode>{CATEGORYCODE}</CategoryCode>\n    </u:X_GetStatus>\n  </s:Body>\n</s:Envelope>"
+        }
+      }
+    },
+    "state_variables": {
+      "scalarwebapi": {
+        "X_ScalarWebAPI": {
+          "name": "X_ScalarWebAPI",
+          "data_type": "string",
+          "send_events": false,
+          "default_value": "",
+          "allowed_values": [],
+          "minimum": null,
+          "maximum": null,
+          "step": null
+        }
+      },
+      "ircc": {
+        "X_A_ARG_TYPE_IRCCCode": {
+          "name": "X_A_ARG_TYPE_IRCCCode",
+          "data_type": "string",
+          "send_events": false,
+          "default_value": "",
+          "allowed_values": [],
+          "minimum": null,
+          "maximum": null,
+          "step": null
+        },
+        "X_A_ARG_TYPE_Category": {
+          "name": "X_A_ARG_TYPE_Category",
+          "data_type": "string",
+          "send_events": false,
+          "default_value": "",
+          "allowed_values": [],
+          "minimum": null,
+          "maximum": null,
+          "step": null
+        },
+        "X_A_ARG_TYPE_CurrentStatus": {
+          "name": "X_A_ARG_TYPE_CurrentStatus",
+          "data_type": "string",
+          "send_events": false,
+          "default_value": "",
+          "allowed_values": [
+            "0",
+            "801",
+            "804",
+            "805",
+            "806"
+          ],
+          "minimum": null,
+          "maximum": null,
+          "step": null
+        },
+        "X_A_ARG_TYPE_CurrentCommandInfo": {
+          "name": "X_A_ARG_TYPE_CurrentCommandInfo",
+          "data_type": "string",
+          "send_events": false,
+          "default_value": "",
+          "allowed_values": [],
+          "minimum": null,
+          "maximum": null,
+          "step": null
+        }
+      }
+    },
+    "capabilities": {
+      "media_control": [],
+      "volume_control": [],
+      "information_retrieval": [
+        "X_GetStatus"
+      ],
+      "configuration": [],
+      "security": []
+    }
+  },
+  "capabilities": {
+    "media_control_actions": 0,
+    "volume_control_actions": 0,
+    "information_actions": 1,
+    "configuration_actions": 0,
+    "security_actions": 0,
+    "total_actions": 1
+  }
+}

@@ -1,0 +1,745 @@
+{
+    "device_profiles": [
+      {
+        "name": "Sonos",
+        "match": {
+          "manufacturer": ["Sonos, Inc."],
+          "deviceType": ["ZonePlayer", "MediaRenderer"],
+          "server_header": ["Sonos"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/MediaRenderer/AVTransport/Control"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/MediaRenderer/RenderingControl/Control"
+          },
+          "groupRendering": {
+            "serviceType": "urn:schemas-upnp-org:service:GroupRenderingControl:1",
+            "controlURL": "/MediaRenderer/GroupRenderingControl/Control"
+          },
+          "queue": {
+            "serviceType": "urn:schemas-sonos-com:service:Queue:1",
+            "controlURL": "/MediaRenderer/Queue/Control"
+          }
+        },
+        "notes": "Official Sonos UPnP control URLs; supports queue-based looping."
+      },
+      {
+        "name": "Roku",
+        "match": {
+          "server_header": ["Roku"],
+          "deviceType": ["MediaRenderer"],
+          "modelName": ["Roku"]
+        },
+        "ecp": {
+          "port": 8060,
+          "launchURL": "/launch/2213",
+          "inputURL": "/input"
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Roku ECP: launch Media Player (2213), then POST to /input with mediaUrl and loop."
+      },
+      {
+        "name": "Samsung DLNA / Soundbar",
+        "match": {
+          "manufacturer": ["Samsung"],
+          "server_header": ["Soundbar", "Linux UPnP", "DLNA"],
+          "modelName": ["HW-Q90R", "HW-Q800T", "HW-MS650", "SoundTouch"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "samsung_wam": {
+          "port": 55001,
+          "setUrlPlayback": {
+            "cmd": "<name>SetUrlPlayback</name><p type=\"cdata\" name=\"url\" val=\"empty\"><![CDATA[{MEDIA_URL}]]></p><p type=\"dec\" name=\"buffersize\" val=\"0\"/><p type=\"dec\" name=\"seektime\" val=\"0\"/><p type=\"dec\" name=\"resume\" val=\"1\"/>",
+            "endpoint": "/UIC?cmd={CMD_ENCODED}"
+          }
+        },
+        "notes": "Samsung Soundbars: setUrlPlayback via port 55001, then playback occurs."
+      },
+      {
+        "name": "LG webOS TV (DLNA)",
+        "match": {
+          "manufacturer": ["LG Electronics"],
+          "modelName": ["webOS", "OLED", "NanoCell"],
+          "server_header": ["webOS", "Linux UPnP", "DLNA"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Standard DLNA control URLs on LG webOS."
+      },
+      {
+        "name": "Sony Bravia TV / Media Player",
+        "match": {
+          "manufacturer": ["Sony"],
+          "modelName": ["BRAVIA", "BDP", "XBR", "KD-"],
+          "server_header": ["Sony", "Linux UPnP"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/DLNA_MEDIA_RENDERER_1/action"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/DLNA_MEDIA_RENDERER_1/action"
+          }
+        },
+        "notes": "Sony TV/BD: uses /DLNA_MEDIA_RENDERER_1/action for both AVTransport and RenderingControl."
+      },
+      {
+        "name": "Denon HEOS",
+        "match": {
+          "manufacturer": ["Denon"],
+          "modelName": ["HEOS"],
+          "server_header": ["HEOS"]
+        },
+        "heos_api": {
+          "port": 1255,
+          "commands": {
+            "play": "{\"system\":{\"set_play_state\":{\"state\":\"play\"}}}",
+            "pause": "{\"system\":{\"set_play_state\":{\"state\":\"pause\"}}}",
+            "stop": "{\"system\":{\"set_play_state\":{\"state\":\"stop\"}}}",
+            "volume": "{\"player\":{\"set_volume\":{\"pid\":0,\"level\":{VOL}}}}",
+            "browse": "{\"browse\":{\"get_queue\":{\"pid\":0,\"count\":100}}}"
+          },
+          "endpoint": "/heos"
+        },
+        "notes": "HEOS devices use JSON over HTTP on port 1255 instead of UPnP SOAP."
+      },
+      {
+        "name": "Yamaha MusicCast",
+        "match": {
+          "manufacturer": ["Yamaha"],
+          "modelName": ["MusicCast", "RX-V", "Aventage"],
+          "server_header": ["MusicCast", "Yamaha"]
+        },
+        "musiccast_api": {
+          "port": 5005,
+          "commands": {
+            "play": "{\"method\":\"play_control\",\"params\":{\"cmd\":\"play\"}}",
+            "pause": "{\"method\":\"play_control\",\"params\":{\"cmd\":\"pause\"}}",
+            "stop": "{\"method\":\"play_control\",\"params\":{\"cmd\":\"stop\"}}",
+            "volume": "{\"method\":\"set_volume\",\"params\":{\"value\":{VOL}}}"
+          },
+          "endpoint": "/YamahaExtendedControl/v1/Control"
+        },
+        "notes": "MusicCast uses a proprietary JSON API on port 5005."
+      },
+      {
+        "name": "Bose SoundTouch",
+        "match": {
+          "manufacturer": ["Bose"],
+          "modelName": ["SoundTouch", "10 Series", "300 Series"],
+          "server_header": ["SoundTouch"]
+        },
+        "soundtouch_api": {
+          "port": 8090,
+          "commands": {
+            "play": "<contentItem source=\"STATION\" location=\"FAVORITE:0\"/>",
+            "pause": "<key state=\"press\" sender=\"Gabbo\">PLAY_PAUSE</key>",
+            "volume": "<volume value=\"{VOL}\"/>"
+          },
+          "endpoints": {
+            "play": "/key",
+            "pause": "/key",
+            "volume": "/volume"
+          }
+        },
+        "notes": "SoundTouch uses XML over HTTP on port 8090 with endpoints /key and /volume."
+      },
+      {
+        "name": "Philips TV (DLNA)",
+        "match": {
+          "manufacturer": ["Philips"],
+          "modelName": ["Philips", "OLED803", "PUS"],
+          "server_header": ["Philips", "Linux UPnP", "DLNA"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Philips DLNA devices often use standard /upnp/control paths."
+      },
+      {
+        "name": "Panasonic Viera (DLNA)",
+        "match": {
+          "manufacturer": ["Panasonic"],
+          "modelName": ["Viera", "TX-", "TS-"],
+          "server_header": ["Panasonic", "Linux UPnP", "DLNA"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Panasonic Viera TVs with DLNA use /upnp/control paths."
+      },
+      {
+        "name": "PlayStation 3 (DLNA)",
+        "match": {
+          "manufacturer": ["Sony"],
+          "modelName": ["PLAYSTATION 3"],
+          "deviceType": ["MediaRenderer"],
+          "server_header": ["PlayStation"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "PS3 acts as a DLNA media renderer; supports pause/play/stop."
+      },
+      {
+        "name": "Xbox One (DLNA)",
+        "match": {
+          "manufacturer": ["Microsoft"],
+          "modelName": ["Xbox One", "XBOXONE"],
+          "deviceType": ["MediaRenderer"],
+          "server_header": ["Xbox"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Xbox One supports DLNA playback control via standard AVTransport."
+      },
+      {
+        "name": "Google Chromecast Audio",
+        "match": {
+          "modelName": ["Chromecast Audio", "Chromecast"],
+          "deviceType": ["MediaRenderer"],
+          "server_header": ["chromecast", "Google"]
+        },
+        "cast": {
+          "port": 8008,
+          "deviceDescURL": "/ssdp/device-desc.xml",
+          "mediaNamespace": "urn:x-cast:com.google.cast.media",
+          "launchURL": "/apps/CC1AD845"
+        },
+        "notes": "Chromecast Audio uses Cast protocol; requires WebSocket for full control. Fallback to UPnP when available."
+      },
+      {
+        "name": "Amazon Fire TV (DLNA)",
+        "match": {
+          "manufacturer": ["Amazon"],
+          "modelName": ["Fire TV", "AFTB", "AFTM", "AFTR", "AFTN"],
+          "server_header": ["UPnP/1.0 DLNADOC/1.50"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Fire TV devices often support standard DLNA control via port 8200."
+      },
+      {
+        "name": "WD TV Live (DLNA)",
+        "match": {
+          "manufacturer": ["Western Digital"],
+          "modelName": ["WD TV Live", "WDTV"],
+          "server_header": ["WDTV"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "WD TV Live media players support DLNA commands on port 7000."
+      },
+      {
+        "name": "Buffalo LinkTheater (DLNA)",
+        "match": {
+          "manufacturer": ["Buffalo"],
+          "modelName": ["LinkTheater", "DR", "TV"],
+          "server_header": ["LinkTheater"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Buffalo LinkTheater DLNA support over port 1900."
+      },
+      {
+        "name": "Nintendo Wii U (DLNA)",
+        "match": {
+          "manufacturer": ["Nintendo"],
+          "modelName": ["Wii U"],
+          "deviceType": ["MediaRenderer"],
+          "server_header": ["Wii U"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Wii U supports DLNA playback control via standard paths."
+      },
+      {
+        "name": "Xbox 360 (DLNA)",
+        "match": {
+          "manufacturer": ["Microsoft"],
+          "modelName": ["Xbox 360", "XBOX360"],
+          "deviceType": ["MediaRenderer"],
+          "server_header": ["Xbox"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Xbox 360 DLNA playback support on port 8200."
+      },
+      {
+        "name": "Logitech Squeezebox",
+        "match": {
+          "manufacturer": ["Logitech"],
+          "modelName": ["Squeezebox", "SB3", "SB4", "SB Touch", "Radio"],
+          "server_header": ["Squeeze"]
+        },
+        "squeezebox_api": {
+          "port": 9000,
+          "commands": {
+            "play": "play",
+            "pause": "pause",
+            "stop": "stop",
+            "volume": "mixer volume {VOL}"
+          },
+          "protocol": "Telnet"
+        },
+        "notes": "Squeezebox uses Telnet-based control on port 9000 (username/password optional)."
+      },
+      {
+        "name": "Plex Media Player",
+        "match": {
+          "modelName": ["Plex"],
+          "server_header": ["PlexMediaPlayer"]
+        },
+        "plex_api": {
+          "port": 32400,
+          "commands": {
+            "play": "/player/playback/play?key={MEDIA_KEY}",
+            "pause": "/player/playback/playPause?key={MEDIA_KEY}",
+            "stop": "/player/playback/stop?key={MEDIA_KEY}&X-Plex-Token={TOKEN}",
+            "volume": "/player/playback/setParameters?volume[level]={VOL}&X-Plex-Token={TOKEN}"
+          },
+          "endpoint_base": "/player/playback/"
+        },
+        "notes": "Plex clients require X-Plex-Token; discovery via /clients endpoint."
+      },
+      {
+        "name": "Kodi (XBMC)",
+        "match": {
+          "manufacturer": ["Kodi", "XBMC Foundation"],
+          "modelName": ["Kodi", "XBMC"],
+          "server_header": ["Kodi", "XBMC"]
+        },
+        "jsonrpc_api": {
+          "port": 8080,
+          "commands": {
+            "play": "{\"jsonrpc\":\"2.0\",\"method\":\"Player.Open\",\"params\":{\"item\":{\"file\":\"{MEDIA_URL}\"}},\"id\":1}",
+            "pause": "{\"jsonrpc\":\"2.0\",\"method\":\"Player.PlayPause\",\"params\":{\"playerid\":1},\"id\":1}",
+            "stop": "{\"jsonrpc\":\"2.0\",\"method\":\"Player.Stop\",\"params\":{\"playerid\":1},\"id\":1}",
+            "volume": "{\"jsonrpc\":\"2.0\",\"method\":\"Application.SetVolume\",\"params\":{\"volume\":{VOL}},\"id\":1}"
+          },
+          "endpoint": "/jsonrpc"
+        },
+        "notes": "Kodi supports JSON-RPC over HTTP on port 8080; authentication optional."
+      },
+      {
+        "name": "VLC (UPnP/DLNA Renderer)",
+        "match": {
+          "manufacturer": ["VideoLAN"],
+          "modelName": ["VLC"],
+          "deviceType": ["MediaRenderer"],
+          "server_header": ["VLC"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/MediaRenderer/AVTransport/Control"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/MediaRenderer/RenderingControl/Control"
+          }
+        },
+        "http_interface": {
+          "port": 8080,
+          "endpoints": {
+            "play": "/requests/status.xml?command=pl_play",
+            "pause": "/requests/status.xml?command=pl_pause",
+            "stop": "/requests/status.xml?command=pl_stop",
+            "volume": "/requests/status.xml?command=volume&val={VOL}"
+          }
+        },
+        "notes": "VLC can act as DLNA renderer; also offers HTTP interface on port 8080 when enabled."
+      },
+      {
+        "name": "OpenWebNet / Bitron Home (IoT speaker)",
+        "match": {
+          "manufacturer": ["BTicino", "Legrand"],
+          "modelName": ["Bitron", "MyHome"],
+          "server_header": ["OpenWebNet"]
+        },
+        "openwebnet_api": {
+          "port": 20000,
+          "commands": {
+            "play": "*1*2##",
+            "pause": "*1*3##",
+            "stop": "*1*4##",
+            "volume_up": "*1*7##",
+            "volume_down": "*1*8##"
+          }
+        },
+        "notes": "OpenWebNet uses proprietary UDP/TCP protocol on port 20000 for Bitron devices."
+      },
+      {
+        "name": "Philips Fidelio (DLNA)",
+        "match": {
+          "manufacturer": ["Philips"],
+          "modelName": ["Fidelio"],
+          "server_header": ["Fidelio"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Philips Fidelio dock/speaker supports DLNA on port 1900."
+      },
+      {
+        "name": "Harman Kardon Allure (DLNA)",
+        "match": {
+          "manufacturer": ["Harman Kardon"],
+          "modelName": ["Allure"],
+          "server_header": ["Allure", "Linux UPnP"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Allure supports DLNA commands; use standard AVTransport/RenderingControl."
+      },
+      {
+        "name": "JBL Link Music (Bluetooth/Chromecast)",
+        "match": {
+          "manufacturer": ["JBL"],
+          "modelName": ["Link Music", "Link Portable"],
+          "server_header": ["Chromecast", "Google"]
+        },
+        "cast": {
+          "port": 8008,
+          "deviceDescURL": "/ssdp/device-desc.xml",
+          "mediaNamespace": "urn:x-cast:com.google.cast.media",
+          "launchURL": "/apps/CC1AD845"
+        },
+        "notes": "JBL Link uses Chromecast built-in; requires Cast protocol over WebSocket."
+      },
+      {
+        "name": "Harman Kardon Citation (Google Cast)",
+        "match": {
+          "manufacturer": ["Harman Kardon"],
+          "modelName": ["Citation", "Muze"],
+          "server_header": ["Chromecast", "Google"]
+        },
+        "cast": {
+          "port": 8008,
+          "deviceDescURL": "/ssdp/device-desc.xml",
+          "mediaNamespace": "urn:x-cast:com.google.cast.media",
+          "launchURL": "/apps/CC1AD845"
+        },
+        "notes": "Citation series supports Chromecast built-in; fallback to UPnP if available."
+      },
+      {
+        "name": "Polk Omni (DLNA)",
+        "match": {
+          "manufacturer": ["Polk Audio"],
+          "modelName": ["Omni"],
+          "server_header": ["Omni"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Polk Omni series uses DLNA control via standard URLs."
+      },
+      {
+        "name": "Denon AVR (Network Receiver)",
+        "match": {
+          "manufacturer": ["Denon"],
+          "modelName": ["AVR", "HEOS AVR"],
+          "server_header": ["Denon"]
+        },
+        "denon_api": {
+          "port": 80,
+          "commands": {
+            "play": "PUT /goform/formiPhoneAppDirect.xml?SI=V, PLAY\r\n",
+            "pause": "PUT /goform/formiPhoneAppDirect.xml?SI=V, PAUSE\r\n",
+            "stop": "PUT /goform/formiPhoneAppDirect.xml?SI=V, STOP\r\n",
+            "volume": "PUT /goform/formiPhoneAppDirect.xml?SI=P, {VOL}\r\n"
+          }
+        },
+        "notes": "Denon AVR uses XML commands on port 80 via formiPhoneAppDirect.xml."
+      },
+      {
+        "name": "Onkyo Network Receiver",
+        "match": {
+          "manufacturer": ["Onkyo"],
+          "modelName": ["TX-", "NR-"],
+          "server_header": ["Onkyo"]
+        },
+        "onkyo_api": {
+          "port": 60128,
+          "commands": {
+            "play": "<command id=\"01\"/><zone_1><go_to_func>PLAY</go_to_func></zone_1>",
+            "pause": "<command id=\"01\"/><zone_1><go_to_func>PAUSE</go_to_func></zone_1>",
+            "stop": "<command id=\"01\"/><zone_1><go_to_func>STOP</go_to_func></zone_1>",
+            "volume": "<command id=\"01\"/><zone_1><volume>{VOL}</volume></zone_1>"
+          }
+        },
+        "notes": "Onkyo uses UDP/TCP commands on port 60128; XML messages in proprietary format."
+      },
+      {
+        "name": "Pioneer Network Receiver",
+        "match": {
+          "manufacturer": ["Pioneer"],
+          "modelName": ["VSX-", "SC-"],
+          "server_header": ["Pioneer"]
+        },
+        "pioneer_api": {
+          "port": 8102,
+          "commands": {
+            "play": "{\"id\":10,\"method\":\"setPlayStatus\",\"params\":[\"play\",0]}",
+            "pause": "{\"id\":10,\"method\":\"setPlayStatus\",\"params\":[\"pause\",0]}",
+            "stop": "{\"id\":10,\"method\":\"setPlayStatus\",\"params\":[\"stop\",0]}",
+            "volume": "{\"id\":10,\"method\":\"setVolume\",\"params\":[\"zone_1\",{VOL}]}",
+            "browse": "{\"id\":10,\"method\":\"browse\",\"params\":[\"zone_1\",\"Qobuz\"]}"
+          },
+          "endpoint": "/jsonrpc.js"
+        },
+        "notes": "Pioneer uses JSON-RPC over HTTP on port 8102."
+      },
+      {
+        "name": "Naim Uniti (UPnP/DLNA)",
+        "match": {
+          "manufacturer": ["Naim"],
+          "modelName": ["Uniti", "Mu-so", "NDX"],
+          "server_header": ["Naim", "UPnP"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Naim Uniti supports standard DLNA control on port 50. Upnp control paths may vary by firmware."
+      },
+      {
+        "name": "Bluesound Node (UPnP/DLNA)",
+        "match": {
+          "manufacturer": ["Bluesound"],
+          "modelName": ["Node", "PowerNode", "Flex"],
+          "server_header": ["Bluesound", "UPnP"]
+        },
+        "bluesound_api": {
+          "port": 11000,
+          "commands": {
+            "play": "<zone><play/></zone>",
+            "pause": "<zone><pause/></zone>",
+            "stop": "<zone><stop/></zone>",
+            "volume": "<zone index=\"0\"><volume value=\"{VOL}\"/></zone>"
+          },
+          "endpoint": "/Control"
+        },
+        "notes": "Bluesound uses local TCP API on port 11000 with XML messages."
+      },
+      {
+        "name": "NVIDIA Shield TV (DLNA/Chromecast)",
+        "match": {
+          "manufacturer": ["NVIDIA"],
+          "modelName": ["Shield"],
+          "server_header": ["NVIDIA"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "cast": {
+          "port": 8008,
+          "deviceDescURL": "/ssdp/device-desc.xml",
+          "mediaNamespace": "urn:x-cast:com.google.cast.media",
+          "launchURL": "/apps/CC1AD845"
+        },
+        "notes": "Shield TV supports both DLNA and Chromecast; attempts DLNA first, Cast if discovered."
+      },
+      {
+        "name": "Google Home / Nest Audio (Cast)",
+        "match": {
+          "manufacturer": ["Google"],
+          "modelName": ["Google Home", "Nest Audio", "Nest Mini"],
+          "server_header": ["Chromecast", "Google"]
+        },
+        "cast": {
+          "port": 8008,
+          "deviceDescURL": "/ssdp/device-desc.xml",
+          "mediaNamespace": "urn:x-cast:com.google.cast.media",
+          "launchURL": "/apps/CC1AD845"
+        },
+        "notes": "Google Home/Nest devices are Cast-only; cannot use UPnP."
+      },
+      {
+        "name": "Amazon Echo / Fire TV Cube (UPnP/DLNA variant)",
+        "match": {
+          "manufacturer": ["Amazon"],
+          "modelName": ["Echo", "Fire TV Cube"],
+          "server_header": ["UPnP/1.0 DLNADOC/1.50"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/upnp/control/AVTransport1"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/upnp/control/RenderingControl1"
+          }
+        },
+        "notes": "Echo devices occasionally expose DLNA endpoints; Fire TV Cube is similar to Fire TV."
+      },
+      {
+        "name": "Harman Kardon Onyx Studio (Bluetooth Only)",
+        "match": {
+          "manufacturer": ["Harman Kardon"],
+          "modelName": ["Onyx Studio"],
+          "server_header": []
+        },
+        "notes": "Bluetooth speaker only; no network control available."
+      },
+      {
+        "name": "Generic UPnP Media Renderer",
+        "match": {
+          "deviceType": ["MediaRenderer:1"]
+        },
+        "upnp": {
+          "avtransport": {
+            "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+            "controlURL": "/MediaRenderer/AVTransport/Control"
+          },
+          "rendering": {
+            "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+            "controlURL": "/MediaRenderer/RenderingControl/Control"
+          },
+          "connectionManager": {
+            "serviceType": "urn:schemas-upnp-org:service:ConnectionManager:1",
+            "controlURL": "/MediaRenderer/ConnectionManager/Control"
+          }
+        },
+        "notes": "Fallback profile for any UPnP MediaRenderer supporting standard service paths."
+      }
+    ]
+  }
+  

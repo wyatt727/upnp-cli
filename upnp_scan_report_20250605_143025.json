@@ -1,0 +1,508 @@
+{
+  "total_devices": 9,
+  "scan_timestamp": 1749151825.635113,
+  "high_priority_devices": [
+    {
+      "device_info": {
+        "ip": "192.168.4.166",
+        "port": 38400,
+        "friendly_name": "Living Room TV",
+        "manufacturer": "SmartTV",
+        "model": "Renderer",
+        "device_type": "urn:schemas-upnp-org:device:MediaRenderer:1"
+      },
+      "profile_match": {
+        "name": "Generic UPnP Media Renderer",
+        "notes": "Fallback profile for any UPnP MediaRenderer supporting standard service paths."
+      },
+      "primary_protocol": "upnp",
+      "services": [
+        {
+          "serviceType": "urn:schemas-upnp-org:service:ConnectionManager:1",
+          "serviceId": "urn:upnp-org:serviceId:ConnectionManager",
+          "controlURL": "/upnp/control/minguscmr",
+          "eventSubURL": "/upnp/event/minguscmr",
+          "SCPDURL": "/MediaServer/cm.xml"
+        },
+        {
+          "serviceType": "urn:schemas-upnp-org:service:AVTransport:1",
+          "serviceId": "urn:upnp-org:serviceId:AVTransport",
+          "controlURL": "/upnp/control/mingusavtr",
+          "eventSubURL": "/upnp/event/mingusavtr",
+          "SCPDURL": "/MediaServer/avt.xml"
+        },
+        {
+          "serviceType": "urn:schemas-upnp-org:service:RenderingControl:1",
+          "serviceId": "urn:upnp-org:serviceId:RenderingControl",
+          "controlURL": "/upnp/control/mingusrcr",
+          "eventSubURL": "/upnp/event/mingusrcr",
+          "SCPDURL": "/MediaServer/rc.xml"
+        }
+      ],
+      "high_priority_services": [
+        {
+          "type": "urn:schemas-upnp-org:service:ConnectionManager:1",
+          "description": "Media Connection Management",
+          "control_url": "/upnp/control/minguscmr"
+        },
+        {
+          "type": "urn:schemas-upnp-org:service:AVTransport:1",
+          "description": "Media Control (Audio/Video)",
+          "control_url": "/upnp/control/mingusavtr"
+        },
+        {
+          "type": "urn:schemas-upnp-org:service:RenderingControl:1",
+          "description": "Volume/Audio Control",
+          "control_url": "/upnp/control/mingusrcr"
+        }
+      ],
+      "medium_priority_services": [],
+      "security_concerns": [],
+      "control_capabilities": [
+        "avtransport",
+        "rendering",
+        "connectionManager"
+      ],
+      "priority_score": 36,
+      "protocol_info": {
+        "priority": 4,
+        "name": "UPnP/DLNA",
+        "description": "Standard media control protocol"
+      }
+    }
+  ],
+  "medium_priority_devices": [
+    {
+      "device_info": {
+        "ip": "192.168.4.166",
+        "port": 8008,
+        "friendly_name": "Living Room TV",
+        "manufacturer": "HVCL",
+        "model": "SmartTV 4K",
+        "device_type": "urn:dial-multiscreen-org:device:dial:1"
+      },
+      "profile_match": {
+        "name": "Google Chromecast Audio",
+        "notes": "Chromecast Audio uses Cast protocol; requires WebSocket for full control. Fallback to UPnP when available."
+      },
+      "primary_protocol": "cast",
+      "services": [
+        {
+          "serviceType": "urn:dial-multiscreen-org:service:dial:1",
+          "serviceId": "urn:dial-multiscreen-org:serviceId:dial",
+          "controlURL": "/ssdp/notfound",
+          "eventSubURL": "/ssdp/notfound",
+          "SCPDURL": "/ssdp/notfound"
+        }
+      ],
+      "high_priority_services": [
+        {
+          "type": "urn:dial-multiscreen-org:service:dial:1",
+          "description": "Cast/DIAL Protocol",
+          "control_url": "/ssdp/notfound"
+        }
+      ],
+      "medium_priority_services": [],
+      "security_concerns": [],
+      "control_capabilities": [],
+      "priority_score": 19,
+      "protocol_info": {
+        "priority": 1,
+        "name": "Google Cast",
+        "description": "High-value target, media streaming"
+      }
+    },
+    {
+      "device_info": {
+        "ip": "192.168.4.38",
+        "port": 8008,
+        "friendly_name": "XBR-55X700D",
+        "manufacturer": "Sony",
+        "model": "BRAVIA 4K GB",
+        "device_type": "urn:dial-multiscreen-org:device:dial:1"
+      },
+      "profile_match": {
+        "name": "Sony Bravia TV / Media Player",
+        "notes": "Sony TV/BD: uses /DLNA_MEDIA_RENDERER_1/action for both AVTransport and RenderingControl."
+      },
+      "primary_protocol": "upnp",
+      "services": [
+        {
+          "serviceType": "urn:dial-multiscreen-org:service:dial:1",
+          "serviceId": "urn:dial-multiscreen-org:serviceId:dial",
+          "controlURL": "/ssdp/notfound",
+          "eventSubURL": "/ssdp/notfound",
+          "SCPDURL": "/ssdp/notfound"
+        }
+      ],
+      "high_priority_services": [
+        {
+          "type": "urn:dial-multiscreen-org:service:dial:1",
+          "description": "Cast/DIAL Protocol",
+          "control_url": "/ssdp/notfound"
+        }
+      ],
+      "medium_priority_services": [],
+      "security_concerns": [],
+      "control_capabilities": [
+        "avtransport",
+        "rendering"
+      ],
+      "priority_score": 16,
+      "protocol_info": {
+        "priority": 4,
+        "name": "UPnP/DLNA",
+        "description": "Standard media control protocol"
+      }
+    },
+    {
+      "device_info": {
+        "ip": "192.168.4.38",
+        "port": 7084,
+        "friendly_name": "XBR-55X700D",
+        "manufacturer": "Sony Corporation",
+        "model": "XBR-55X700D",
+        "device_type": "urn:schemas-upnp-org:device:Basic:1"
+      },
+      "profile_match": {
+        "name": "Sony Bravia TV / Media Player",
+        "notes": "Sony TV/BD: uses /DLNA_MEDIA_RENDERER_1/action for both AVTransport and RenderingControl."
+      },
+      "primary_protocol": "upnp",
+      "services": [
+        {
+          "serviceType": "urn:dial-multiscreen-org:service:dial:1",
+          "serviceId": "urn:dial-multiscreen-org:serviceId:dial",
+          "controlURL": "/upnp/control/DIAL",
+          "SCPDURL": "/DIALSCPD.xml"
+        }
+      ],
+      "high_priority_services": [
+        {
+          "type": "urn:dial-multiscreen-org:service:dial:1",
+          "description": "Cast/DIAL Protocol",
+          "control_url": "/upnp/control/DIAL"
+        }
+      ],
+      "medium_priority_services": [],
+      "security_concerns": [],
+      "control_capabilities": [
+        "avtransport",
+        "rendering"
+      ],
+      "priority_score": 16,
+      "protocol_info": {
+        "priority": 4,
+        "name": "UPnP/DLNA",
+        "description": "Standard media control protocol"
+      }
+    }
+  ],
+  "low_priority_devices": [
+    {
+      "device_info": {
+        "ip": "192.168.4.1",
+        "port": 1900,
+        "friendly_name": "eero",
+        "manufacturer": "eero inc.",
+        "model": "eero 6+",
+        "device_type": "urn:schemas-upnp-org:device:InternetGatewayDevice:1"
+      },
+      "profile_match": {
+        "name": "Naim Uniti (UPnP/DLNA)",
+        "notes": "Naim Uniti supports standard DLNA control on port 50. Upnp control paths may vary by firmware."
+      },
+      "primary_protocol": "upnp",
+      "services": [
+        {
+          "serviceType": "urn:schemas-upnp-org:service:Layer3Forwarding:1",
+          "serviceId": "urn:upnp-org:serviceId:L3Forwarding1",
+          "controlURL": "/l3f",
+          "eventSubURL": "/l3f/events",
+          "SCPDURL": "/l3f.xml"
+        }
+      ],
+      "high_priority_services": [],
+      "medium_priority_services": [],
+      "security_concerns": [],
+      "control_capabilities": [
+        "avtransport",
+        "rendering"
+      ],
+      "priority_score": 6,
+      "protocol_info": {
+        "priority": 4,
+        "name": "UPnP/DLNA",
+        "description": "Standard media control protocol"
+      }
+    },
+    {
+      "device_info": {
+        "ip": "192.168.4.48",
+        "port": 50201,
+        "friendly_name": "Unknown Device",
+        "manufacturer": "Unknown",
+        "model": "Unknown",
+        "device_type": "Unknown"
+      },
+      "profile_match": {
+        "name": "Sony Bravia TV / Media Player",
+        "notes": "Sony TV/BD: uses /DLNA_MEDIA_RENDERER_1/action for both AVTransport and RenderingControl."
+      },
+      "primary_protocol": "upnp",
+      "services": [],
+      "high_priority_services": [],
+      "medium_priority_services": [],
+      "security_concerns": [],
+      "control_capabilities": [
+        "avtransport",
+        "rendering"
+      ],
+      "priority_score": 6,
+      "protocol_info": {
+        "priority": 4,
+        "name": "UPnP/DLNA",
+        "description": "Standard media control protocol"
+      }
+    },
+    {
+      "device_info": {
+        "ip": "192.168.4.152",
+        "port": 1400,
+        "friendly_name": "192.168.4.152 - Sonos Port - RINCON_38420B8DB3FC01400",
+        "manufacturer": "Sonos, Inc.",
+        "model": "Sonos Port",
+        "device_type": "urn:schemas-upnp-org:device:ZonePlayer:1"
+      },
+      "profile_match": {
+        "name": "Sonos",
+        "notes": "Official Sonos UPnP control URLs; supports queue-based looping."
+      },
+      "primary_protocol": "upnp",
+      "services": [
+        {
+          "serviceType": "urn:schemas-upnp-org:service:AlarmClock:1",
+          "serviceId": "urn:upnp-org:serviceId:AlarmClock",
+          "controlURL": "/AlarmClock/Control",
+          "eventSubURL": "/AlarmClock/Event",
+          "SCPDURL": "/xml/AlarmClock1.xml"
+        },
+        {
+          "serviceType": "urn:schemas-upnp-org:service:MusicServices:1",
+          "serviceId": "urn:upnp-org:serviceId:MusicServices",
+          "controlURL": "/MusicServices/Control",
+          "eventSubURL": "/MusicServices/Event",
+          "SCPDURL": "/xml/MusicServices1.xml"
+        },
+        {
+          "serviceType": "urn:schemas-upnp-org:service:AudioIn:1",
+          "serviceId": "urn:upnp-org:serviceId:AudioIn",
+          "controlURL": "/AudioIn/Control",
+          "eventSubURL": "/AudioIn/Event",
+          "SCPDURL": "/xml/AudioIn1.xml"
+        },
+        {
+          "serviceType": "urn:schemas-upnp-org:service:DeviceProperties:1",
+          "serviceId": "urn:upnp-org:serviceId:DeviceProperties",
+          "controlURL": "/DeviceProperties/Control",
+          "eventSubURL": "/DeviceProperties/Event",
+          "SCPDURL": "/xml/DeviceProperties1.xml"
+        },
+        {
+          "serviceType": "urn:schemas-upnp-org:service:SystemProperties:1",
+          "serviceId": "urn:upnp-org:serviceId:SystemProperties",
+          "controlURL": "/SystemProperties/Control",
+          "eventSubURL": "/SystemProperties/Event",
+          "SCPDURL": "/xml/SystemProperties1.xml"
+        },
+        {
+          "serviceType": "urn:schemas-upnp-org:service:ZoneGroupTopology:1",
+          "serviceId": "urn:upnp-org:serviceId:ZoneGroupTopology",
+          "controlURL": "/ZoneGroupTopology/Control",
+          "eventSubURL": "/ZoneGroupTopology/Event",
+          "SCPDURL": "/xml/ZoneGroupTopology1.xml"
+        },
+        {
+          "serviceType": "urn:schemas-upnp-org:service:GroupManagement:1",
+          "serviceId": "urn:upnp-org:serviceId:GroupManagement",
+          "controlURL": "/GroupManagement/Control",
+          "eventSubURL": "/GroupManagement/Event",
+          "SCPDURL": "/xml/GroupManagement1.xml"
+        },
+        {
+          "serviceType": "urn:schemas-tencent-com:service:QPlay:1",
+          "serviceId": "urn:tencent-com:serviceId:QPlay",
+          "controlURL": "/QPlay/Control",
+          "eventSubURL": "/QPlay/Event",
+          "SCPDURL": "/xml/QPlay1.xml"
+        }
+      ],
+      "high_priority_services": [],
+      "medium_priority_services": [],
+      "security_concerns": [],
+      "control_capabilities": [
+        "avtransport",
+        "rendering",
+        "groupRendering",
+        "queue"
+      ],
+      "priority_score": 6,
+      "protocol_info": {
+        "priority": 4,
+        "name": "UPnP/DLNA",
+        "description": "Standard media control protocol"
+      }
+    },
+    {
+      "device_info": {
+        "ip": "192.168.4.38",
+        "port": 9080,
+        "friendly_name": "Unknown Device",
+        "manufacturer": "Unknown",
+        "model": "Unknown",
+        "device_type": "Unknown"
+      },
+      "profile_match": {
+        "name": "Naim Uniti (UPnP/DLNA)",
+        "notes": "Naim Uniti supports standard DLNA control on port 50. Upnp control paths may vary by firmware."
+      },
+      "primary_protocol": "upnp",
+      "services": [],
+      "high_priority_services": [],
+      "medium_priority_services": [],
+      "security_concerns": [],
+      "control_capabilities": [
+        "avtransport",
+        "rendering"
+      ],
+      "priority_score": 6,
+      "protocol_info": {
+        "priority": 4,
+        "name": "UPnP/DLNA",
+        "description": "Standard media control protocol"
+      }
+    },
+    {
+      "device_info": {
+        "ip": "192.168.4.166",
+        "port": 9080,
+        "friendly_name": "Unknown Device",
+        "manufacturer": "Unknown",
+        "model": "Unknown",
+        "device_type": "Unknown"
+      },
+      "profile_match": {
+        "name": "Naim Uniti (UPnP/DLNA)",
+        "notes": "Naim Uniti supports standard DLNA control on port 50. Upnp control paths may vary by firmware."
+      },
+      "primary_protocol": "upnp",
+      "services": [],
+      "high_priority_services": [],
+      "medium_priority_services": [],
+      "security_concerns": [],
+      "control_capabilities": [
+        "avtransport",
+        "rendering"
+      ],
+      "priority_score": 6,
+      "protocol_info": {
+        "priority": 4,
+        "name": "UPnP/DLNA",
+        "description": "Standard media control protocol"
+      }
+    }
+  ],
+  "unknown_devices": [],
+  "service_summary": {
+    "urn:dial-multiscreen-org:service:dial:1": {
+      "count": 3,
+      "devices": [
+        "Living Room TV",
+        "XBR-55X700D",
+        "XBR-55X700D"
+      ]
+    },
+    "urn:schemas-upnp-org:service:Layer3Forwarding:1": {
+      "count": 1,
+      "devices": [
+        "eero"
+      ]
+    },
+    "urn:schemas-upnp-org:service:ConnectionManager:1": {
+      "count": 1,
+      "devices": [
+        "Living Room TV"
+      ]
+    },
+    "urn:schemas-upnp-org:service:AVTransport:1": {
+      "count": 1,
+      "devices": [
+        "Living Room TV"
+      ]
+    },
+    "urn:schemas-upnp-org:service:RenderingControl:1": {
+      "count": 1,
+      "devices": [
+        "Living Room TV"
+      ]
+    },
+    "urn:schemas-upnp-org:service:AlarmClock:1": {
+      "count": 1,
+      "devices": [
+        "192.168.4.152 - Sonos Port - RINCON_38420B8DB3FC01400"
+      ]
+    },
+    "urn:schemas-upnp-org:service:MusicServices:1": {
+      "count": 1,
+      "devices": [
+        "192.168.4.152 - Sonos Port - RINCON_38420B8DB3FC01400"
+      ]
+    },
+    "urn:schemas-upnp-org:service:AudioIn:1": {
+      "count": 1,
+      "devices": [
+        "192.168.4.152 - Sonos Port - RINCON_38420B8DB3FC01400"
+      ]
+    },
+    "urn:schemas-upnp-org:service:DeviceProperties:1": {
+      "count": 1,
+      "devices": [
+        "192.168.4.152 - Sonos Port - RINCON_38420B8DB3FC01400"
+      ]
+    },
+    "urn:schemas-upnp-org:service:SystemProperties:1": {
+      "count": 1,
+      "devices": [
+        "192.168.4.152 - Sonos Port - RINCON_38420B8DB3FC01400"
+      ]
+    },
+    "urn:schemas-upnp-org:service:ZoneGroupTopology:1": {
+      "count": 1,
+      "devices": [
+        "192.168.4.152 - Sonos Port - RINCON_38420B8DB3FC01400"
+      ]
+    },
+    "urn:schemas-upnp-org:service:GroupManagement:1": {
+      "count": 1,
+      "devices": [
+        "192.168.4.152 - Sonos Port - RINCON_38420B8DB3FC01400"
+      ]
+    },
+    "urn:schemas-tencent-com:service:QPlay:1": {
+      "count": 1,
+      "devices": [
+        "192.168.4.152 - Sonos Port - RINCON_38420B8DB3FC01400"
+      ]
+    }
+  },
+  "security_findings": [],
+  "protocol_distribution": {
+    "upnp": 8,
+    "cast": 1
+  },
+  "recommendations": [
+    "\ud83c\udfaf 1 high-priority targets found - focus penetration testing here",
+    "\u26a1 3 medium-priority targets available for secondary testing",
+    "\ud83d\udcf1 Chromecast devices found - consider Cast protocol attacks"
+  ]
+}

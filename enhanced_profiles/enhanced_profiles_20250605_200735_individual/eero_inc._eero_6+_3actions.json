@@ -1,0 +1,203 @@
+{
+  "name": "eero inc. eero 6+",
+  "match": {
+    "manufacturer": [
+      "eero inc."
+    ],
+    "modelName": [
+      "eero 6+"
+    ],
+    "deviceType": [
+      "urn:schemas-upnp-org:device:InternetGatewayDevice:1"
+    ]
+  },
+  "metadata": {
+    "generated_at": "2025-06-05 20:07:35",
+    "scpd_analysis": {
+      "services_analyzed": 2,
+      "successful_parses": 2,
+      "total_actions": 3,
+      "parsing_errors": []
+    }
+  },
+  "upnp": {
+    "services": {
+      "layer3forwarding": {
+        "serviceType": "urn:schemas-upnp-org:service:Layer3Forwarding:1",
+        "scpdURL": "http://192.168.4.1:1900/l3f.xml",
+        "controlURL": "/l3f",
+        "action_count": 2,
+        "parsing_success": true
+      },
+      "wancommoninterfaceconfig": {
+        "serviceType": "urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1",
+        "scpdURL": "http://192.168.4.1:1900/ifc.xml",
+        "controlURL": "/ifc",
+        "action_count": 1,
+        "parsing_success": true
+      }
+    },
+    "action_inventory": {
+      "layer3forwarding": {
+        "SetDefaultConnectionService": {
+          "name": "SetDefaultConnectionService",
+          "description": "",
+          "arguments_in": [
+            {
+              "name": "NewDefaultConnectionService",
+              "direction": "in",
+              "data_type": "string",
+              "related_state_variable": "DefaultConnectionService",
+              "required": true,
+              "validation": {
+                "data_type": "string"
+              }
+            }
+          ],
+          "arguments_out": [],
+          "complexity": "\ud83d\udfe1 Medium",
+          "category": "configuration",
+          "soap_template": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n  <s:Body>\n    <u:SetDefaultConnectionService xmlns:u=\"urn:schemas-upnp-org:service:Layer3Forwarding:1\">\n      <NewDefaultConnectionService>{NEWDEFAULTCONNECTIONSERVICE}</NewDefaultConnectionService>\n    </u:SetDefaultConnectionService>\n  </s:Body>\n</s:Envelope>"
+        },
+        "GetDefaultConnectionService": {
+          "name": "GetDefaultConnectionService",
+          "description": "",
+          "arguments_in": [],
+          "arguments_out": [
+            {
+              "name": "NewDefaultConnectionService",
+              "direction": "out",
+              "data_type": "string",
+              "related_state_variable": "DefaultConnectionService"
+            }
+          ],
+          "complexity": "\ud83d\udfe1 Medium",
+          "category": "information_retrieval",
+          "soap_template": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n  <s:Body>\n    <u:GetDefaultConnectionService xmlns:u=\"urn:schemas-upnp-org:service:Layer3Forwarding:1\">\n\n    </u:GetDefaultConnectionService>\n  </s:Body>\n</s:Envelope>"
+        }
+      },
+      "wancommoninterfaceconfig": {
+        "GetCommonLinkProperties": {
+          "name": "GetCommonLinkProperties",
+          "description": "",
+          "arguments_in": [],
+          "arguments_out": [
+            {
+              "name": "NewWANAccessType",
+              "direction": "out",
+              "data_type": "string",
+              "related_state_variable": "WANAccessType"
+            },
+            {
+              "name": "NewLayer1UpstreamMaxBitRate",
+              "direction": "out",
+              "data_type": "ui4",
+              "related_state_variable": "Layer1UpstreamMaxBitRate"
+            },
+            {
+              "name": "NewLayer1DownstreamMaxBitRate",
+              "direction": "out",
+              "data_type": "ui4",
+              "related_state_variable": "Layer1DownstreamMaxBitRate"
+            },
+            {
+              "name": "NewPhysicalLinkStatus",
+              "direction": "out",
+              "data_type": "string",
+              "related_state_variable": "PhysicalLinkStatus"
+            }
+          ],
+          "complexity": "\ud83d\udd34 Complex",
+          "category": "information_retrieval",
+          "soap_template": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n  <s:Body>\n    <u:GetCommonLinkProperties xmlns:u=\"urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1\">\n\n    </u:GetCommonLinkProperties>\n  </s:Body>\n</s:Envelope>"
+        }
+      }
+    },
+    "state_variables": {
+      "layer3forwarding": {
+        "DefaultConnectionService": {
+          "name": "DefaultConnectionService",
+          "data_type": "string",
+          "send_events": true,
+          "default_value": "",
+          "allowed_values": [],
+          "minimum": null,
+          "maximum": null,
+          "step": null
+        }
+      },
+      "wancommoninterfaceconfig": {
+        "WANAccessType": {
+          "name": "WANAccessType",
+          "data_type": "string",
+          "send_events": false,
+          "default_value": "",
+          "allowed_values": [
+            "DSL",
+            "POTS",
+            "Cable",
+            "Ethernet"
+          ],
+          "minimum": null,
+          "maximum": null,
+          "step": null
+        },
+        "Layer1UpstreamMaxBitRate": {
+          "name": "Layer1UpstreamMaxBitRate",
+          "data_type": "ui4",
+          "send_events": false,
+          "default_value": "",
+          "allowed_values": [],
+          "minimum": null,
+          "maximum": null,
+          "step": null
+        },
+        "Layer1DownstreamMaxBitRate": {
+          "name": "Layer1DownstreamMaxBitRate",
+          "data_type": "ui4",
+          "send_events": false,
+          "default_value": "",
+          "allowed_values": [],
+          "minimum": null,
+          "maximum": null,
+          "step": null
+        },
+        "PhysicalLinkStatus": {
+          "name": "PhysicalLinkStatus",
+          "data_type": "string",
+          "send_events": true,
+          "default_value": "",
+          "allowed_values": [
+            "Up",
+            "Down",
+            "Initializing",
+            "Unavailable"
+          ],
+          "minimum": null,
+          "maximum": null,
+          "step": null
+        }
+      }
+    },
+    "capabilities": {
+      "media_control": [],
+      "volume_control": [],
+      "information_retrieval": [
+        "GetDefaultConnectionService",
+        "GetCommonLinkProperties"
+      ],
+      "configuration": [
+        "SetDefaultConnectionService"
+      ],
+      "security": []
+    }
+  },
+  "capabilities": {
+    "media_control_actions": 0,
+    "volume_control_actions": 0,
+    "information_actions": 2,
+    "configuration_actions": 1,
+    "security_actions": 0,
+    "total_actions": 3
+  }
+}

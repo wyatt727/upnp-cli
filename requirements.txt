@@ -1,0 +1,35 @@
+# Core async HTTP client
+aiohttp>=3.8.0
+
+# YAML support for device profiles
+pyyaml>=6.0
+
+# Network interface detection
+netifaces>=0.11.0
+
+# HTTP client library (for sync operations)
+requests>=2.25.0
+
+# Enhanced urllib3 
+urllib3>=1.26.0
+
+# Chromecast support
+pychromecast>=13.0.0
+
+# Progress bars for CLI
+tqdm>=4.64.0
+
+# XML parsing enhancement
+lxml>=4.9.0
+
+# IP address manipulation
+ipaddress>=1.0.23
+
+# Testing framework
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+
+# Development tools
+black>=22.0.0
+flake8>=5.0.0
+mypy>=1.0.0 
