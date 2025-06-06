@@ -6,7 +6,9 @@ Plays fart.mp3 on repeat across all compatible UPnP devices.
 
 import time
 import asyncio
-from typing import List, Dict, Any
+import signal
+import atexit
+from typing import List, Dict, Any, Set
 import aiohttp
 
 from .base_routine import AsyncBaseRoutine
@@ -55,8 +57,151 @@ class FartLoopRoutine(AsyncBaseRoutine):
         "upnp-cli routine fart_loop --media-file https://example.com/audio.mp3"
     ]
     
+    def __init__(self):
+        """Initialize the routine with cleanup tracking."""
+        super().__init__()
+        self.active_devices: Set[str] = set()  # Track devices with active playback
+        self.cleanup_in_progress = False
+        self._setup_signal_handlers()
+        self._setup_exit_handler()
+    
+    def _setup_signal_handlers(self):
+        """Setup signal handlers for graceful shutdown."""
+        try:
+            # Handle Ctrl+C (SIGINT) and termination (SIGTERM)
+            signal.signal(signal.SIGINT, self._signal_handler)
+            signal.signal(signal.SIGTERM, self._signal_handler)
+            
+            # On Unix systems, also handle SIGHUP
+            if hasattr(signal, 'SIGHUP'):
+                signal.signal(signal.SIGHUP, self._signal_handler)
+                
+            self.logger.info("Signal handlers registered for graceful cleanup")
+        except Exception as e:
+            self.logger.warning(f"Could not setup signal handlers: {e}")
+    
+    def _setup_exit_handler(self):
+        """Setup exit handler to ensure cleanup runs on normal exit."""
+        atexit.register(self._emergency_cleanup)
+    
+    def _signal_handler(self, signum, frame):
+        """Handle signals by performing cleanup and exiting."""
+        self.logger.info(f"Received signal {signum}, initiating cleanup...")
+        print(f"\n🛑 Received interrupt signal, stopping fart loops on all devices...")
+        
+        # Run cleanup synchronously in signal handler
+        self._emergency_cleanup()
+        
+        # Exit gracefully
+        print("✅ Cleanup completed, exiting.")
+        exit(0)
+    
+    def _emergency_cleanup(self):
+        """Emergency cleanup that runs synchronously for signal handlers and atexit."""
+        if self.cleanup_in_progress or not self.active_devices:
+            return
+        
+        self.cleanup_in_progress = True
+        
+        try:
+            print(f"🧹 Performing emergency cleanup on {len(self.active_devices)} active devices...")
+            
+            # Import here to avoid circular imports
+            import asyncio
+            
+            # Try to get the current event loop, create one if none exists
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_closed():
+                    raise RuntimeError("Loop is closed")
+            except RuntimeError:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+            
+            # Run the async cleanup
+            if not loop.is_running():
+                loop.run_until_complete(self._stop_all_active_devices())
+            else:
+                # If loop is already running (shouldn't happen in signal handler), 
+                # create a task for cleanup
+                asyncio.create_task(self._stop_all_active_devices())
+                
+        except Exception as e:
+            self.logger.error(f"Emergency cleanup failed: {e}")
+            print(f"⚠️ Emergency cleanup failed: {e}")
+        finally:
+            # Always stop the HTTP server
+            super().cleanup()
+    
+    async def _stop_all_active_devices(self):
+        """Stop playback on all devices that have active loops."""
+        if not self.active_devices:
+            return
+        
+        print(f"🛑 Stopping playback on {len(self.active_devices)} devices...")
+        
+        # Create stop routine instance
+        stop_routine = StopFartLoopRoutine()
+        
+        # Convert device IDs back to device objects for the stop routine
+        devices_to_stop = []
+        for device_id in list(self.active_devices):  # Copy to avoid modification during iteration
+            try:
+                # Parse device ID (format: "ip:port")
+                if ':' in device_id:
+                    ip, port = device_id.split(':', 1)
+                    port = int(port)
+                else:
+                    ip = device_id
+                    port = 1400  # Default UPnP port
+                
+                # Create minimal device object for stop routine
+                device = {
+                    'ip': ip,
+                    'port': port,
+                    'services': [],  # Stop routine will work with minimal info
+                    'friendlyName': device_id
+                }
+                devices_to_stop.append(device)
+                
+            except Exception as e:
+                self.logger.error(f"Failed to parse device ID {device_id}: {e}")
+        
+        if devices_to_stop:
+            try:
+                result = await stop_routine.execute_async(devices_to_stop)
+                successful = result.get('successful_devices', 0)
+                total = result.get('total_devices', len(devices_to_stop))
+                print(f"✅ Stopped {successful}/{total} devices successfully")
+                
+                # Clear the active devices set
+                self.active_devices.clear()
+                
+            except Exception as e:
+                self.logger.error(f"Failed to stop active devices: {e}")
+                print(f"⚠️ Failed to stop some devices: {e}")
+    
+    async def execute_async(self, devices: List[Dict[str, Any]], **kwargs) -> Dict[str, Any]:
+        """Override execute_async to add cleanup on completion or failure."""
+        try:
+            # Call parent implementation
+            result = await super().execute_async(devices, **kwargs)
+            return result
+            
+        except Exception as e:
+            self.logger.error(f"Fart loop routine failed: {e}")
+            # Perform cleanup on failure
+            await self._stop_all_active_devices()
+            raise
+        finally:
+            # Note: We don't automatically cleanup here because the user might want
+            # the fart loop to continue running. Cleanup only happens on signals/exit.
+            pass
+    
     async def execute_on_device_async(self, device: Dict[str, Any], **kwargs) -> Dict[str, Any]:
         """Execute fart loop on a single device."""
+        device_id = f"{device.get('ip')}:{device.get('port', 1400)}"
+        
         try:
             volume = kwargs.get('volume', 50)
             server_port = kwargs.get('server_port', 8080)
@@ -92,26 +237,35 @@ class FartLoopRoutine(AsyncBaseRoutine):
             self.logger.info(f"Choosing protocol for manufacturer: '{manufacturer}'")
             
             # Choose the best protocol for this device
+            result = None
             if 'sonos' in manufacturer:
                 print("DEBUG: Using Sonos direct method")
                 self.logger.info("Using Sonos direct method")
-                return await self._execute_sonos_queue(device, media_url, volume)
+                result = await self._execute_sonos_queue(device, media_url, volume)
             elif 'roku' in manufacturer:
                 print("DEBUG: Using Roku ECP method")
                 self.logger.info("Using Roku ECP method")
-                return await self._execute_roku_ecp(device, media_url, volume)
+                result = await self._execute_roku_ecp(device, media_url, volume)
             elif 'samsung' in manufacturer:
                 print("DEBUG: Using Samsung WAM method")
                 self.logger.info("Using Samsung WAM method")
-                return await self._execute_samsung_wam(device, media_url, volume)
+                result = await self._execute_samsung_wam(device, media_url, volume)
             elif 'chromecast' in device.get('modelName', '').lower():
                 print("DEBUG: Using Chromecast method")
                 self.logger.info("Using Chromecast method")
-                return await self._execute_chromecast(device, media_url, volume)
+                result = await self._execute_chromecast(device, media_url, volume)
             else:
                 print("DEBUG: Using generic UPnP method")
                 self.logger.info("Using generic UPnP method")
-                return await self._execute_upnp(device, media_url, volume)
+                result = await self._execute_upnp(device, media_url, volume)
+            
+            # Track successful device activations
+            if result and result.get('status') in ['success', 'partial_success']:
+                self.active_devices.add(device_id)
+                print(f"DEBUG: Added {device_id} to active devices. Total active: {len(self.active_devices)}")
+                self.logger.info(f"Added {device_id} to active devices tracking")
+            
+            return result
                 
         except Exception as e:
             print(f"DEBUG: Exception in execute_on_device_async: {e}")
@@ -728,8 +882,16 @@ class FartLoopRoutine(AsyncBaseRoutine):
         }
     
     def cleanup(self) -> Dict[str, Any]:
-        """Clean up resources when routine is stopped."""
-        return self.stop_http_server()
+        """Enhanced cleanup that stops playback on all active devices AND stops HTTP server."""
+        if self.cleanup_in_progress:
+            return {'status': 'already_in_progress'}
+        
+        print("🧹 Performing fart loop cleanup...")
+        
+        # Use the emergency cleanup which is synchronous
+        self._emergency_cleanup()
+        
+        return {'status': 'cleanup_completed', 'devices_stopped': len(self.active_devices)}
 
 
 class StopFartLoopRoutine(AsyncBaseRoutine):

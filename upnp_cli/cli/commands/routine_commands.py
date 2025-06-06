@@ -84,7 +84,16 @@ async def cmd_routine(args) -> Dict[str, Any]:
             ColoredOutput.header(f"🎵 Mass executing routine '{args.routine_name}' on {len(all_device_info)} devices")
             
             routine = routine_class()
-            result = await routine.execute(all_device_info, **routine_args)
+            try:
+                result = await routine.execute(all_device_info, **routine_args)
+            except KeyboardInterrupt:
+                ColoredOutput.warning("\n🛑 Routine interrupted by user")
+                # Cleanup is handled by signal handlers in the routine
+                raise
+            except Exception as e:
+                ColoredOutput.error(f"Routine execution failed: {e}")
+                # Cleanup should be handled by the routine's exception handling
+                raise
             
             if args.json:
                 print(json.dumps(result, indent=2))
@@ -139,7 +148,16 @@ async def cmd_routine(args) -> Dict[str, Any]:
             device_info['use_ssl'] = args.use_ssl
         
         routine = routine_class()
-        result = await routine.execute([device_info], **routine_args)
+        try:
+            result = await routine.execute([device_info], **routine_args)
+        except KeyboardInterrupt:
+            ColoredOutput.warning("\n🛑 Routine interrupted by user")
+            # Cleanup is handled by signal handlers in the routine
+            raise
+        except Exception as e:
+            ColoredOutput.error(f"Routine execution failed: {e}")
+            # Cleanup should be handled by the routine's exception handling
+            raise
         
         if args.json:
             print(json.dumps(result, indent=2))
